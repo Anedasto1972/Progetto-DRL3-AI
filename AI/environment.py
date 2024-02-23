@@ -1,6 +1,5 @@
 from gymnasium import Env
 from gymnasium.spaces import Discrete
-import matplotlib.pyplot as plt
 import random
 import numpy as np
 
