@@ -21,14 +21,7 @@ class ModelBasedAgent:
             exp_values = np.exp(self.H_values - np.max(self.H_values)) / self.temperature
             total_exp = np.sum(exp_values)
             probabilities = exp_values / total_exp if total_exp != 0 else np.ones_like(exp_values) / len(exp_values)
-            if env.duration_safe_phase > 1:
-                state_to_update: int = np.random.choice(np.arange(0, 6))
-            elif env.duration_safe_phase == 1:
-                state_to_update: int = 6
-            elif env.duration_safe_phase == 0 and env.duration_addictive_phase > 1:
-                state_to_update: int = np.random.choice(np.arange(7, 21))
-            elif env.duration_addictive_phase == 1:
-                state_to_update: int = np.random.choice([14, 19])
+            state_to_update = np.random.choice(self.num_states, p = probabilities)
             for a in range(self.num_actions):
                 for s in range(self.num_states):
                     reward: float = self.model.predict_reward(state_to_update, a, s)
