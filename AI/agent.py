@@ -64,7 +64,7 @@ class ModelFreeAgent:
     def choose_action(self, state: int):
         return int(np.argmax(self.q_values[state]))
 
-    def update_q_values(self, state: int, action: int, next_state: int, reward: float, done: bool):
+    def update_q_values(self, state: int, action: int, next_state: int, reward: float):
         if reward is not None:
             future_q_value = np.max(self.q_values[next_state])
             temporal_difference = (reward + self.discount_factor * future_q_value - self.q_values[state][action])
