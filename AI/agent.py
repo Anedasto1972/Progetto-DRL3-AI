@@ -93,10 +93,10 @@ class HybridAgent:
             return np.random.choice(self.model_based_agent.num_actions)
         else:
             beta = np.random.choice(self.beta_values)
-            q_values_mb = self.model_based_agent.values[state]
-            q_values_mf = self.model_free_agent.q_values[state]
-            q_values_hybrid = beta * q_values_mb + (1 - beta) * q_values_mf
-            return np.argmax(q_values_hybrid[state])
+            q_values_mb = self.model_based_agent.values
+            q_values_mf = self.model_free_agent.q_values
+            self.q_values_hybrid[state] = beta * q_values_mb[state] + (1 - beta) * q_values_mf[state]
+            return np.argmax(self.q_values_hybrid[state])
     
     def step(self, state: int):
         action_mb = self.model_based_agent.step(state)
