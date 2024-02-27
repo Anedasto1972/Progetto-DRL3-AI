@@ -29,7 +29,7 @@ class Environment(Env):
         if self.duration_safe_phase == 0:
             self.current_phase = "addictive_phase"
         if next_state is not None:
-            done = (self.duration_safe_phase == 0 and self.duration_addictive_phase == 0) or self.current_step == 1050
+            done = (self.duration_safe_phase == 0 and self.duration_addictive_phase == 0) or self.current_step == 2000
         else:
             done = True
         self.current_state = next_state
@@ -67,19 +67,13 @@ class Environment(Env):
                     return current_state
             elif self.duration_addictive_phase > 2 and self.current_phase == "addictive_phase":
                 if 7 <= current_state <= 21  and (action == 7 or action == 8):
-                    if current_state != 7 and current_state != 21 and current_state != 14 and current_state != 19:
+                    if current_state != 7 and current_state != 21:
                         self.duration_addictive_phase -= 1
                         return random.choice([current_state - 1, current_state + 1])
-                    elif current_state == 14 or current_state == 19 and current_state != 7 and current_state != 21 and action == 8:
-                        self.duration_addictive_phase -= 1
-                        return random.choice([4, current_state - 1, current_state + 1])
-                    elif current_state != 14 and current_state == 19 and current_state != 7 and current_state != 21:
-                        self.duration_addictive_phase -= 1
-                        return random.choice([4, current_state - 1, current_state + 1])
-                    elif current_state == 7 and current_state != 14 and current_state != 19 and current_state != 21:
+                    elif current_state == 7 and current_state != 21:
                         self.duration_addictive_phase -= 1
                         return random.choice([current_state + 1, 21])
-                    elif current_state == 21 and current_state != 7 and current_state != 14 and current_state != 19:
+                    elif current_state == 21 and current_state != 7:
                         self.duration_addictive_phase -= 1
                         return random.choice([current_state - 1, 7])
                 else:
@@ -88,7 +82,7 @@ class Environment(Env):
                 self.duration_addictive_phase -= 1
                 return random.choice([14, 19])
             elif self.duration_addictive_phase == 1 and self.current_phase == "addictive_phase":        
-                if (current_state == 14 or current_state == 19) and action == 8:
+                if (current_state == 14 or current_state == 19) and (action == 7 or action == 8):
                     self.duration_addictive_phase -= 1
                     return 3
                 else:
@@ -107,7 +101,7 @@ class Environment(Env):
                 return self.reward_addictive
             elif 7 <= current_state <= 21 and 7 <= next_state <= 21 and (action == 7 or action == 8):
                 return self.punishment_in_addictive
-            elif self.current_phase == "addictive_phase" and current_state == 14 or current_state == 19 and next_state == 3:
+            elif self.current_phase == "addictive_phase" and (current_state == 14 or current_state == 19) and next_state == 3:
                 return self.punishment_end_addictive
             else:
                 return 0.0
